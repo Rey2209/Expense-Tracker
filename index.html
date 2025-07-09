@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00fff2" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+
+</head>
+
+<body>
+  <!--This is Splash Effect-->
+
+  <div id="splashScreen" class="splash">
+    <div class="spinner"></div>
+    <h1 class="splash-text">Expense Tracker</h1>
+    <p class="splash-sub typewriter">Final Destination of all Bills...</p>
+  </div>
+
+
+  <!-- 🔐 PIN Prompt Modal -->
+  <div id="pinPromptModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Enter Your 4-Digit PIN</h2>
+      <input type="password" id="pinInput" maxlength="4" placeholder="****" />
+      <button id="pinSubmit">Unlock</button>
+      <p id="pinError" class="error-msg"></p>
+    </div>
+  </div>
+
+  <!-- 📝 Registration Page -->
+  <div id="registrationPage" class="page">
+    <div class="form-card glass">
+      <h2>Register</h2>
+      <form id="registrationForm">
+        <input type="text" id="fullName" placeholder="Full Name" required />
+        <input type="tel" id="phoneNumber" placeholder="Mobile Number" required />
+        <input type="email" id="email" placeholder="Email Address" required />
+        <input type="file" id="profilePic" hidden />
+        <label for="profilePic" class="custom-file-btn">📷 Choose Profile Photo</label>
+        <span id="fileName" class="file-name-label">No file chosen</span>
+        <img id="profilePreview" src="assets/default-profile.png" alt="Profile Preview" class="profile-preview-img" />
+
+
+        <input type="password" id="pin" placeholder="4-Digit PIN" maxlength="4" required />
+        <button type="submit">Register</button>
+      </form>
+      <footer>Made With Love By SHIVRAJ </footer>
+    </div>
+  </div>
+
+  <!-- 📊 Main App -->
+  <div id="app" class="hidden">
+    <!-- 🌐 Navbar -->
+    <nav class="navbar glass">
+      <div class="navbar-left">
+        <img id="navProfilePic" src="assets/default-profile.png" alt="Profile" />
+        <span class="app-name">Expense Tracker</span>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">☰</button>
+        <div class="dropdown-content">
+          <a href="#" id="navDashboard">Dashboard</a>
+          <a href="#" id="navMakeEntry">Make Entry</a>
+          <a href="#" id="navHistory">History</a>
+          <a href="#" id="navReport">Report</a>
+          <a href="#" id="navLogout">Logout</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 📋 Dashboard Section -->
+    <section id="dashboardSection" class="section">
+      <h2>Dashboard</h2>
+      <div class="cards">
+        <div class="card glass">
+          <h3>Total Income</h3>
+          <p id="totalIncome">₹0</p>
+        </div>
+        <div class="card glass">
+          <h3>Total Expenses</h3>
+          <p id="totalExpense">₹0</p>
+        </div>
+        <div class="card glass">
+          <h3>Net Balance</h3>
+          <p id="netBalance">₹0</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ➕ Make Entry Section -->
+    <section id="entrySection" class="section hidden">
+      <h2>Make an Entry</h2>
+      <form id="entryForm" class="glass">
+        <select id="entryType" required>
+          <option value="" disabled selected>Select Type</option>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+        <input type="date" id="entryDate" required />
+        <input type="text" id="entryDescription" placeholder="Description" required />
+        <input type="text" id="entryCategory" placeholder="Category" required />
+        <input type="number" id="entryAmount" placeholder="Amount" required />
+        <button type="submit" id="entrySubmit">Add Entry</button>
+      </form>
+    </section>
+
+    <!-- 📜 History Section -->
+    <section id="historySection" class="section hidden">
+      <h2>History</h2>
+      <div id="historyList" class="history-list"></div>
+    </section>
+
+    <!-- 📄 Report Section & Modal -->
+    <section id="reportSection" class="section hidden">
+      <h2>Generate Report</h2>
+      <form id="reportForm" class="glass">
+        <label>From: <input type="date" id="reportFrom" required /></label>
+        <label>To: <input type="date" id="reportTo" required /></label>
+        <label>Type:
+          <select id="reportType">
+            <option value="all">Income & Expenses</option>
+            <option value="income">Income Only</option>
+            <option value="expense">Expenses Only</option>
+          </select>
+        </label>
+        <button type="submit">Generate PDF</button>
+      </form>
+    </section>
+
+    <!-- 📑 PDF Modal -->
+    <div id="pdfModal" class="modal hidden">
+      <div class="modal-content pdf-preview">
+        <span id="closePdfModal" class="close">&times;</span>
+        <h2>PDF Preview</h2>
+        <div class="pdf-preview glass">
+          <div id="pdfContent"></div>
+        </div>
+        <button id="downloadPdf">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="hidden">Toast Message</div>
+
+  <div id="logoutConfirmModal" class="modal hidden">
+    <div class="modal-content">
+      <p>Are you sure you want to logout and delete all your data?</p>
+      <button id="confirmLogoutBtn">Yes, Logout</button>
+      <button id="cancelLogoutBtn">Cancel</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- JS Script -->
+  <script src="app.js"></script>
+</body>
+
+</html>
